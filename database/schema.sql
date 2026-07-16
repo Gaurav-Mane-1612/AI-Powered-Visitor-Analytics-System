@@ -1,9 +1,9 @@
--- =====================================================
+-- ==========================================
 -- AI-Powered Visitor Analytics System
 -- Database Schema
 -- Version : 1.0
--- Team : Gaurav & Himanshu
--- =====================================================
+-- Team : Krishna & Himanshu
+-- ==========================================
 
 DROP DATABASE IF EXISTS visitor_analytics_db;
 
@@ -11,11 +11,12 @@ CREATE DATABASE visitor_analytics_db;
 
 USE visitor_analytics_db;
 
---======================================================
--- Users table
---=======================================================
+-- ==========================================
+-- Users Table
+-- ==========================================
+
 CREATE TABLE users (
-    id INT PRIMARY KEYAUTO_INCREMENT,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     full_name VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
