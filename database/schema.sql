@@ -23,3 +23,34 @@ CREATE TABLE users (
     role ENUM('Admin','Receptionist') NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+--===========================================
+-- Visitors Table
+--===========================================
+
+CREATE TABLE visitors (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    full_name VARCHAR(100) NOT NULL,
+    mobile VARCHAR(15) NOT NULL,
+    email VARCHAR(100),
+    organization VARCHAR(100),
+    address TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+--============================================
+-- Visits Table
+--============================================
+
+CREATE TABLE visits (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    visitor_id INT NOT NULL,
+    host_name VARCHAR(100) NOT NULL,
+    purpose VARCHAR(255) NOT NULL,
+    check_in DATETIME NOT NULL,
+    check_out DATETIME,
+    status ENUM('Checked-In','Checked-Out') DEFAULT 'Checked-In',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (visitor_id)
+    REFERENCES visitors(id)
+);
