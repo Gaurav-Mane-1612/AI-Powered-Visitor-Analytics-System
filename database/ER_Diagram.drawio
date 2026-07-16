@@ -1,0 +1,54 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="kwSGQTPDexOw-QUSCcpT">
+    <mxGraphModel dx="828" dy="553" grid="1" gridSize="12" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="F_osMdIcapylmf-mLF8r-1" parent="1" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;arcSize=4;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" value="USERS" vertex="1">
+          <mxGeometry height="168" width="108" x="346.5" y="72" as="geometry">
+            <mxRectangle height="50" width="96" x="346.5" y="72" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="F_osMdIcapylmf-mLF8r-2" parent="F_osMdIcapylmf-mLF8r-1" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;whiteSpace=wrap;" value="&lt;div&gt;PK id&lt;/div&gt;&lt;div&gt;full_name&lt;/div&gt;&lt;div&gt;email&lt;/div&gt;&lt;div&gt;password&lt;/div&gt;&lt;div&gt;role&lt;/div&gt;&lt;div&gt;created_at&lt;/div&gt;" vertex="1">
+          <mxGeometry height="118" width="108" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="F_osMdIcapylmf-mLF8r-5" parent="1" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;arcSize=4;whiteSpace=wrap;html=1;fillColor=#008a00;fontColor=#ffffff;strokeColor=#005700;" value="VISITORS" vertex="1">
+          <mxGeometry height="168" width="108" x="348" y="336" as="geometry" />
+        </mxCell>
+        <mxCell id="F_osMdIcapylmf-mLF8r-6" parent="F_osMdIcapylmf-mLF8r-5" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;whiteSpace=wrap;" value="&lt;div&gt;PK id&lt;/div&gt;&lt;div&gt;full_name&lt;/div&gt;&lt;div&gt;mobile&lt;/div&gt;&lt;div&gt;email&lt;/div&gt;&lt;div&gt;organization&lt;/div&gt;&lt;div&gt;address&lt;/div&gt;&lt;div&gt;created_at&lt;/div&gt;" vertex="1">
+          <mxGeometry height="118" width="108" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="F_osMdIcapylmf-mLF8r-7" parent="1" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;arcSize=4;whiteSpace=wrap;html=1;fillColor=light-dark(#ffff88, #ffeb8a);strokeColor=#36393d;swimlaneFillColor=default;fillStyle=auto;labelBorderColor=none;fontColor=light-dark(#000000,#000000);" value="VISITS" vertex="1">
+          <mxGeometry height="182" width="111" x="348" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="F_osMdIcapylmf-mLF8r-8" parent="F_osMdIcapylmf-mLF8r-7" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;whiteSpace=wrap;" value="&lt;div&gt;PK id&lt;/div&gt;&lt;div&gt;FK visitor_id&lt;/div&gt;&lt;div&gt;host_name&lt;/div&gt;&lt;div&gt;purpose&lt;/div&gt;&lt;div&gt;check_in&lt;/div&gt;&lt;div&gt;check_out&lt;/div&gt;&lt;div&gt;status&lt;/div&gt;&lt;div&gt;created_at&lt;/div&gt;" vertex="1">
+          <mxGeometry height="132" width="111" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="F_osMdIcapylmf-mLF8r-11" parent="1" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;arcSize=4;whiteSpace=wrap;html=1;fillColor=light-dark(#6A00FF,#9933FF);fontColor=#ffffff;strokeColor=#3700CC;gradientColor=none;" value="FEEDBACK" vertex="1">
+          <mxGeometry height="168" width="111" x="348" y="876" as="geometry" />
+        </mxCell>
+        <mxCell id="F_osMdIcapylmf-mLF8r-12" parent="F_osMdIcapylmf-mLF8r-11" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;whiteSpace=wrap;" value="&lt;div&gt;PK id&lt;/div&gt;&lt;div&gt;FK visit_id&lt;/div&gt;&lt;div&gt;rating&lt;/div&gt;&lt;div&gt;feedback&lt;/div&gt;&lt;div&gt;sentiment&lt;/div&gt;&lt;div&gt;ai_summary&lt;/div&gt;&lt;div&gt;created_at&lt;/div&gt;" vertex="1">
+          <mxGeometry height="118" width="111" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="F_osMdIcapylmf-mLF8r-15" edge="1" parent="1" style="endArrow=none;html=1;rounded=0;dashed=1;dashPattern=1 2;entryX=0.43;entryY=0.011;entryDx=0;entryDy=0;entryPerimeter=0;" target="F_osMdIcapylmf-mLF8r-7" value="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="396" y="504" as="sourcePoint" />
+            <mxPoint x="396" y="588" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="F_osMdIcapylmf-mLF8r-16" connectable="0" parent="F_osMdIcapylmf-mLF8r-15" style="resizable=0;html=1;whiteSpace=wrap;align=right;verticalAlign=bottom;" value="N" vertex="1">
+          <mxGeometry relative="1" x="1" as="geometry" />
+        </mxCell>
+        <mxCell id="F_osMdIcapylmf-mLF8r-20" edge="1" parent="1" source="F_osMdIcapylmf-mLF8r-8" style="endArrow=none;html=1;rounded=0;dashed=1;dashPattern=1 2;exitX=0.408;exitY=1.051;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.415;entryY=-0.041;entryDx=0;entryDy=0;entryPerimeter=0;" target="F_osMdIcapylmf-mLF8r-11" value="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="348" y="768" as="sourcePoint" />
+            <mxPoint x="508" y="768" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="F_osMdIcapylmf-mLF8r-21" connectable="0" parent="F_osMdIcapylmf-mLF8r-20" style="resizable=0;html=1;whiteSpace=wrap;align=right;verticalAlign=bottom;" value="1" vertex="1">
+          <mxGeometry relative="1" x="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
