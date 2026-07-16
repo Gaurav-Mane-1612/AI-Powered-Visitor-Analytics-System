@@ -54,3 +54,19 @@ CREATE TABLE visits (
     FOREIGN KEY (visitor_id)
     REFERENCES visitors(id)
 );
+
+--============================================
+-- Feedback Table
+--============================================
+
+CREATE TABLE feedback (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    visit_id INT NOT NULL,
+    rating TINYINT NOT NULL,
+    feedback TEXT,
+    sentiment ENUM('Positive','Neutral','Negative'),
+    ai_summary TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (visit_id)
+    REFERENCES visits(id)
+);
