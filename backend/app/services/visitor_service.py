@@ -29,3 +29,30 @@ def create_visitor(visitor):
 
     finally:
         connection.close()
+
+
+def get_all_visitors():
+    connection = get_connection()
+
+    try:
+        with connection.cursor() as cursor:
+            sql = """
+            SELECT
+                id,
+                full_name,
+                mobile,
+                email,
+                organization,
+                address,
+                created_at
+            FROM visitors
+            ORDER BY id DESC
+            """
+
+            cursor.execute(sql)
+            visitors = cursor.fetchall()
+
+            return visitors
+
+    finally:
+        connection.close()
