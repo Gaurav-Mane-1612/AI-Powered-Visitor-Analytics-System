@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from backend.app.database.database import get_connection
 
 
@@ -6,19 +7,49 @@ def create_visitor(visitor):
 
     try:
         with connection.cursor() as cursor:
+
+            # Check duplicate mobile
+            cursor.execute(
+                "SELECT id FROM visitors WHERE mobile=%s",
+                (visitor.mobile,)
+            )
+
+            if cursor.fetchone():
+                raise HTTPException(
+                    status_code=400,
+                    detail="Mobile number already exists"
+                )
+
+            # Check duplicate email
+            if visitor.email:
+                cursor.execute(
+                    "SELECT id FROM visitors WHERE email=%s",
+                    (visitor.email,)
+                )
+
+                if cursor.fetchone():
+                    raise HTTPException(
+                        status_code=400,
+                        detail="Email already exists"
+                    )
+
+            # Insert visitor
             sql = """
             INSERT INTO visitors
             (full_name, mobile, email, organization, address)
             VALUES (%s, %s, %s, %s, %s)
             """
 
-            cursor.execute(sql, (
-                visitor.full_name,
-                visitor.mobile,
-                visitor.email,
-                visitor.organization,
-                visitor.address
-            ))
+            cursor.execute(
+                sql,
+                (
+                    visitor.full_name,
+                    visitor.mobile,
+                    visitor.email,
+                    visitor.organization,
+                    visitor.address
+                )
+            )
 
         connection.commit()
 
