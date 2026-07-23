@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
 
 from backend.app.schemas.visitor_schema import VisitorCreate
 
@@ -19,13 +19,29 @@ def register_visitor(visitor: VisitorCreate):
 
 
 @router.get("/visitors")
-def fetch_all_visitors():
-    return get_all_visitors()
+def fetch_all_visitors(
+    page: int = Query(1, ge=1),
+    limit: int = Query(10, ge=1),
+    search: str = "",
+    organization: str = "",
+    sort_by: str = "id",
+    order: str = "desc"
+):
+
+    return get_all_visitors(
+        page,
+        limit,
+        search,
+        organization,
+        sort_by,
+        order
+    )
 
 
 @router.get("/visitors/{visitor_id}")
 def fetch_visitor(visitor_id: int):
     return get_visitor_by_id(visitor_id)
+
 
 @router.put("/visitors/{visitor_id}")
 def update_visitor_data(visitor_id: int, visitor: VisitorCreate):
@@ -33,7 +49,6 @@ def update_visitor_data(visitor_id: int, visitor: VisitorCreate):
     updated = update_visitor(visitor_id, visitor)
 
     if updated:
-
         return {
             "status": "success",
             "message": "Visitor updated successfully"

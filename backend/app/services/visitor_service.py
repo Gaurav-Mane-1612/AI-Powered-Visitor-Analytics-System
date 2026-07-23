@@ -1,5 +1,6 @@
 from fastapi import HTTPException
 from backend.app.database.database import get_connection
+from backend.app.services.audit_service import create_audit_log
 
 
 def create_visitor(visitor):
@@ -33,7 +34,6 @@ def create_visitor(visitor):
                         detail="Email already exists"
                     )
 
-            # Insert visitor
             sql = """
             INSERT INTO visitors
             (full_name, mobile, email, organization, address)
@@ -53,6 +53,12 @@ def create_visitor(visitor):
 
         connection.commit()
 
+        create_audit_log(
+            user_email="System",
+            action="VISITOR_REGISTER",
+            description=f"Visitor '{visitor.full_name}' registered successfully."
+        )
+
         return {
             "status": "success",
             "message": "Visitor registered successfully"
@@ -62,12 +68,69 @@ def create_visitor(visitor):
         connection.close()
 
 
-def get_all_visitors():
+def get_all_visitors(
+    page=1,
+    limit=10,
+    search="",
+    organization="",
+    sort_by="id",
+    order="desc"
+):
+
     connection = get_connection()
 
     try:
         with connection.cursor() as cursor:
-            sql = """
+
+            allowed_sort_columns = [
+                "id",
+                "full_name",
+                "mobile",
+                "email",
+                "organization",
+                "created_at"
+            ]
+
+            if sort_by not in allowed_sort_columns:
+                sort_by = "id"
+
+            order = order.upper()
+
+            if order not in ["ASC", "DESC"]:
+                order = "DESC"
+
+            offset = (page - 1) * limit
+
+            keyword = f"%{search}%"
+            org_keyword = f"%{organization}%"
+
+            count_sql = """
+            SELECT COUNT(*) AS total
+            FROM visitors
+            WHERE
+            (
+                full_name LIKE %s
+                OR mobile LIKE %s
+                OR email LIKE %s
+                OR organization LIKE %s
+            )
+            AND organization LIKE %s
+            """
+
+            cursor.execute(
+                count_sql,
+                (
+                    keyword,
+                    keyword,
+                    keyword,
+                    keyword,
+                    org_keyword
+                )
+            )
+
+            total = cursor.fetchone()["total"]
+
+            sql = f"""
             SELECT
                 id,
                 full_name,
@@ -77,23 +140,58 @@ def get_all_visitors():
                 address,
                 created_at
             FROM visitors
-            ORDER BY id DESC
+            WHERE
+            (
+                full_name LIKE %s
+                OR mobile LIKE %s
+                OR email LIKE %s
+                OR organization LIKE %s
+            )
+            AND organization LIKE %s
+            ORDER BY {sort_by} {order}
+            LIMIT %s OFFSET %s
             """
 
-            cursor.execute(sql)
+            cursor.execute(
+                sql,
+                (
+                    keyword,
+                    keyword,
+                    keyword,
+                    keyword,
+                    org_keyword,
+                    limit,
+                    offset
+                )
+            )
+
             visitors = cursor.fetchall()
 
-            return visitors
+            total_pages = (total + limit - 1) // limit
+
+            return {
+                "page": page,
+                "limit": limit,
+                "total_records": total,
+                "total_pages": total_pages,
+                "sort_by": sort_by,
+                "order": order,
+                "search": search,
+                "organization_filter": organization,
+                "data": visitors
+            }
 
     finally:
         connection.close()
 
 
 def get_visitor_by_id(visitor_id: int):
+
     connection = get_connection()
 
     try:
         with connection.cursor() as cursor:
+
             sql = """
             SELECT
                 id,
@@ -104,7 +202,7 @@ def get_visitor_by_id(visitor_id: int):
                 address,
                 created_at
             FROM visitors
-            WHERE id = %s
+            WHERE id=%s
             """
 
             cursor.execute(sql, (visitor_id,))
@@ -123,6 +221,7 @@ def get_visitor_by_id(visitor_id: int):
 
 
 def update_visitor(visitor_id, visitor):
+
     connection = get_connection()
 
     try:
@@ -130,7 +229,8 @@ def update_visitor(visitor_id, visitor):
 
             sql = """
             UPDATE visitors
-            SET full_name=%s,
+            SET
+                full_name=%s,
                 mobile=%s,
                 email=%s,
                 organization=%s,
@@ -155,6 +255,12 @@ def update_visitor(visitor_id, visitor):
             if rows == 0:
                 return None
 
+            create_audit_log(
+                user_email="System",
+                action="VISITOR_UPDATE",
+                description=f"Visitor '{visitor.full_name}' updated successfully."
+            )
+
             return True
 
     finally:
@@ -162,19 +268,38 @@ def update_visitor(visitor_id, visitor):
 
 
 def delete_visitor(visitor_id):
+
     connection = get_connection()
 
     try:
         with connection.cursor() as cursor:
 
-            sql = "DELETE FROM visitors WHERE id=%s"
+            # Get visitor name before delete
+            cursor.execute(
+                "SELECT full_name FROM visitors WHERE id=%s",
+                (visitor_id,)
+            )
 
-            rows = cursor.execute(sql, (visitor_id,))
+            visitor = cursor.fetchone()
+
+            if not visitor:
+                return None
+
+            rows = cursor.execute(
+                "DELETE FROM visitors WHERE id=%s",
+                (visitor_id,)
+            )
 
             connection.commit()
 
             if rows == 0:
                 return None
+
+            create_audit_log(
+                user_email="System",
+                action="VISITOR_DELETE",
+                description=f"Visitor '{visitor['full_name']}' deleted successfully."
+            )
 
             return True
 

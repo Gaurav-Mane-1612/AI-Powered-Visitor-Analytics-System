@@ -1,5 +1,6 @@
 from backend.app.database.database import get_connection
 from backend.app.auth.jwt_handler import create_access_token
+from backend.app.services.audit_service import create_audit_log
 import bcrypt
 
 
@@ -46,6 +47,15 @@ def register_user(user):
             )
 
         connection.commit()
+
+        # ============================
+        # Audit Log
+        # ============================
+        create_audit_log(
+            "System",
+            "USER_REGISTER",
+            f"User '{user.email}' registered with role '{user.role}'."
+        )
 
         return {
             "status": "success",
@@ -117,6 +127,15 @@ def login_user(login_data):
                     "status": "error",
                     "message": "Invalid email or password"
                 }
+
+            # ============================
+            # Audit Log
+            # ============================
+            create_audit_log(
+                user["email"],
+                "LOGIN",
+                "User logged into the system."
+            )
 
             # Generate JWT Token
             token = create_access_token(

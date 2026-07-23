@@ -1,5 +1,7 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
+
 from backend.app.schemas.visit_schema import VisitCreate
+
 from backend.app.services.visit_service import (
     create_visit,
     get_all_visits,
@@ -16,8 +18,25 @@ def register_visit(visit: VisitCreate):
 
 
 @router.get("/visits")
-def read_all_visits():
-    return get_all_visits()
+def read_all_visits(
+    page: int = Query(1, ge=1),
+    limit: int = Query(10, ge=1),
+    search: str = "",
+    department: str = "",
+    person_to_meet: str = "",
+    sort_by: str = "id",
+    order: str = "desc"
+):
+
+    return get_all_visits(
+        page,
+        limit,
+        search,
+        department,
+        person_to_meet,
+        sort_by,
+        order
+    )
 
 
 @router.get("/visits/{visit_id}")
