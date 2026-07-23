@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends
 
 from backend.app.auth.auth_bearer import JWTBearer
+from backend.app.auth.roles import admin_required
 
 from backend.app.schemas.user_schema import UserCreate
 from backend.app.schemas.auth_schema import LoginRequest
@@ -19,8 +20,12 @@ def create_user(user: UserCreate):
     return register_user(user)
 
 
+# Admin Only
 @router.get("/users")
-def read_all_users():
+def read_all_users(token=Depends(JWTBearer())):
+
+    admin_required(token)
+
     return get_all_users()
 
 
